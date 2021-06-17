@@ -8,26 +8,33 @@ class RequestHandler(SimpleXMLRPCRequestHandler):
 with SimpleXMLRPCServer(("127.0.0.1",8008), requestHandler=RequestHandler, allow_none=True) as server:
     server.register_introspection_functions()
     
-    antrian = []   
+    # untuk menyimpan data registrasi
+    dataMedis = []   
+    # untuk menyimpan jumlah berapa kali program dijalankan oleh client
     iterasi = 0
     
+    # fungsi untuk melakukan registrasi
     def registrasi(noRekam,nama,tanggalLahir,klinik):
+        # inisialiasi variabel global iterasi
         global iterasi
 
-        # untuk menyimpan data yang diinputkan user kedalam variabel
-        antrian.append([])
-        antrian[iterasi].append(noRekam)
-        antrian[iterasi].append(nama)
-        antrian[iterasi].append(tanggalLahir)
-        antrian[iterasi].append(klinik)
+        # untuk menyimpan data yang diinputkan user kedalam array dataMedis
+        dataMedis.append([])
+        dataMedis[iterasi].append(noRekam)
+        dataMedis[iterasi].append(nama)
+        dataMedis[iterasi].append(tanggalLahir)
+        dataMedis[iterasi].append(klinik)
         # menentukan jam masuk praktek
-        antrian[iterasi].append((datetime.now() + timedelta(hours = 1)).strftime("%H:%M:%S"))
+        # dataMedis[iterasi].append((datetime.now() + timedelta(hours = 1)).strftime("%H:%M:%S"))
 
-        noAntrian = hitungAntrian(antrian,klinik)
-        antrian[iterasi].append(noAntrian)
+        # untuk menghitung nomor antrian sesuai dengan klinik yang dipilih
+        noAntrian = hitungAntrian(dataMedis,klinik)
+        dataMedis[iterasi].append(noAntrian)
 
+        # menambahkan jumlah iterasi
         iterasi += 1
 
+        # kondisi untuk menghandle jika antrian adalah antrian yang pertama
         if noAntrian == 0:
             waktuTunggu = 0
             noAntrian += 1
@@ -39,9 +46,11 @@ with SimpleXMLRPCServer(("127.0.0.1",8008), requestHandler=RequestHandler, allow
 
         return arr
 
+    # untuk menampilkan datamedis
     def seeList():
-        return antrian
+        return dataMedis
 
+    # untuk menghitung antrian sesuai dengan klinik
     def hitungAntrian(arr,key):
         jumlah = 0
         for j in range(len(arr)):
@@ -50,15 +59,16 @@ with SimpleXMLRPCServer(("127.0.0.1",8008), requestHandler=RequestHandler, allow
                     jumlah += 1
         return jumlah
 
+    # untuk melihat antrian berdasarkan klinik dan norekam medis
     def lihatAntrian(noRekam,klinik):
-        global antrian
-        for j in range(len(antrian)):
+        global dataMedis
+        for j in range(len(dataMedis)):
             # untuk mengecek klinik dan no rekam medis dari array
-            if antrian[j][3] == klinik and antrian[j][0] == noRekam:
-                return antrian[j]
+            if dataMedis[j][3] == klinik and dataMedis[j][0] == noRekam:
+                return dataMedis[j]
         return False
 
-
+    # menginisialisasi fungsi agar dapat digunakan oleh client
     server.register_function(registrasi, 'registrasi')
     server.register_function(seeList, 'seeList')
     server.register_function(lihatAntrian, 'lihatAntrian')
@@ -68,4 +78,5 @@ with SimpleXMLRPCServer(("127.0.0.1",8008), requestHandler=RequestHandler, allow
     #     print(datetime.datetime.now().strftime("%H:%M:%S"), end="\r")
     #     time.sleep(1)
     
+    # menjalankan server selamanya
     server.serve_forever()
