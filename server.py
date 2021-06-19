@@ -18,6 +18,10 @@ with SimpleXMLRPCServer(("127.0.0.1",8008), requestHandler=RequestHandler, allow
         # inisialiasi variabel global iterasi
         global iterasi
 
+        # untuk menghandle jika datamedis kosong
+        if len(dataMedis) == 0:
+            iterasi = 0
+
         # untuk menyimpan data yang diinputkan user kedalam array dataMedis
         dataMedis.append([])
         dataMedis[iterasi].append(noRekam)
@@ -25,10 +29,20 @@ with SimpleXMLRPCServer(("127.0.0.1",8008), requestHandler=RequestHandler, allow
         dataMedis[iterasi].append(tanggalLahir)
         dataMedis[iterasi].append(klinik)
         # menentukan jam masuk praktek
-        # dataMedis[iterasi].append((datetime.now() + timedelta(hours = 1)).strftime("%H:%M:%S"))
+        noAntrian = hitungAntrian(dataMedis,klinik)
+        if(noAntrian-1 == 0):   
+            # memasukkan perkiraan waktu selesai dari user.
+            dataMedis[iterasi].append((datetime.now() + timedelta(minutes = 1)).strftime("%H:%M:%S"))
+        else:
+            # untuk mengambil waktu selesai dari antrian sebelumnya
+            waktuSelesai = datetime.strptime(datetime.now().date().strftime("%d%m%y")+" "+dataMedis[len(dataMedis)-2][4], "%d%m%y %H:%M:%S")
+             
+            if(waktuSelesai < datetime.now()):
+                dataMedis[iterasi].append((datetime.now() + timedelta(minutes = 1)).strftime("%H:%M:%S"))
+            else:
+                dataMedis[iterasi].append((waktuSelesai + timedelta(minutes = 1)).strftime("%H:%M:%S"))
 
         # untuk menghitung nomor antrian sesuai dengan klinik yang dipilih
-        noAntrian = hitungAntrian(dataMedis,klinik)
         dataMedis[iterasi].append(noAntrian)
 
         # menambahkan jumlah iterasi
@@ -62,21 +76,35 @@ with SimpleXMLRPCServer(("127.0.0.1",8008), requestHandler=RequestHandler, allow
     # untuk melihat antrian berdasarkan klinik dan norekam medis
     def lihatAntrian(noRekam,klinik):
         global dataMedis
+        k = 0
         for j in range(len(dataMedis)):
             # untuk mengecek klinik dan no rekam medis dari array
             if dataMedis[j][3] == klinik and dataMedis[j][0] == noRekam:
-                return dataMedis[j]
+                return k,dataMedis[j][5]
+            else:
+                k += 1
         return False
+
+    def refreshUrutan():
+        global dataMedis
+        if len(dataMedis) > 0:
+            if dataMedis[0][4] < datetime.now().strftime("%H:%M:%S"):
+                dataMedis.pop(0)
+        return True
 
     # menginisialisasi fungsi agar dapat digunakan oleh client
     server.register_function(registrasi, 'registrasi')
     server.register_function(seeList, 'seeList')
     server.register_function(lihatAntrian, 'lihatAntrian')
+    server.register_function(refreshUrutan, 'refreshUrutan')
     
     print("Serving.....")
-    # while True:
-    #     print(datetime.datetime.now().strftime("%H:%M:%S"), end="\r")
-    #     time.sleep(1)
-    
     # menjalankan server selamanya
+    
     server.serve_forever()
+    
+    # while True:
+    #     print(datetime.now().strftime("%H:%M:%S"), end="\r")
+    #     time.sleep(1)
+        
+

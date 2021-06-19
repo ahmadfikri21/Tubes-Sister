@@ -53,16 +53,28 @@ def DataMedis():
 	print("=====================================")
 	input()
 
+def cariAntrian():
+    os.system("CLS")
+    # nama klinik
+    k = input("Nama Klinik : ")
+    # no rekam medis
+    nk = input("No Rekam Medis : ")
+    tunggu,hasil = s.lihatAntrian(nk,k)
+
+    if hasil == False:
+        print("Maaf data antrian anda tidak ditemukan")
+    else:
+        print("Nomor Antrian anda adalah ",hasil)
+        print("Anda harus Menunggu ",tunggu," Antrian Lagi")
+
 #MAIN
-PilihKlinik();
-DataMedis();
+# PilihKlinik()
+# DataMedis()
+# cariAntrian();
+# s.refreshUrutan()
 
 #function yang diambil dari server
 print()
 print("Berikut adalah data medis yang ada pada seluruh klinik yang kami miliki:")
 print(s.seeList())
 print("=====> Mohon ditunggu <=======")
-# hasil = s.lihatAntrian("002","Klinik Sukapura")
-
-# print("Nomor Antrian anda adalah ",hasil[5])
-# print("Anda harus Menunggu ",hasil[5]-1," Antrian Lagi")
