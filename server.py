@@ -82,15 +82,17 @@ with SimpleXMLRPCServer(("127.0.0.1",8008), requestHandler=RequestHandler, allow
             if dataMedis[j][3] == klinik and dataMedis[j][0] == noRekam:
                 return k,dataMedis[j][5]
             else:
-                k += 1
+                if dataMedis[j][3] == klinik:
+                    k += 1
         return False,False
 
     #untuk menghapus antrian sesuai waktu
     def refreshUrutan():
-        global dataMedis
+        global dataMedis, iterasi
         if len(dataMedis) > 0:
             if dataMedis[0][4] < datetime.now().strftime("%H:%M:%S"):
                 dataMedis.pop(0)
+                iterasi -= 1
         return True
 
     # menginisialisasi fungsi agar dapat digunakan oleh client
