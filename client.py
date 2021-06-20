@@ -6,16 +6,15 @@ s = xmlrpc.client.ServerProxy('http://127.0.0.1:8008', allow_none=True)
 def HomePage():
 	while True:
 		os.system("CLS")
+		s.refreshUrutan()
 		print("==========> Bagian Homepage <========")
 		print("=====================================")
 		print("======__________________________=====")
 		print("=====|           Menu           |====")
 		print("=====|  1. Pilih Klinik         |====")
-		print("=====|  2. Lihat Data Antrian   |====")
+		print("=====|  2. Lihat Data Medis     |====")
 		print("=====|     Seluruh Klinik       |====")
-		print("=====|  3. Cari Klinik dan      |====")
-		print("=====|     Lihat Data Antrian   |====")
-		print("=====|  4. Cari Antrian         |====")
+		print("=====|  3. Cari Antrian         |====")
 		print("=====|  0. Exit                 |====")
 		print("=====|__________________________|====")
 		print("=====================================")
@@ -28,7 +27,6 @@ def HomePage():
 		if answer == '1':
 			PilihKlinik()
 		elif answer == '2':
-			s.refreshUrutan()
 			print()
 			print("Berikut adalah data medis yang ada pada seluruh klinik yang kami miliki:")
 			print(s.seeList())
@@ -36,9 +34,6 @@ def HomePage():
 			print("=====> Mohon ditunggu <=======")			
 			input()
 		elif answer == '3':
-			lihatAntrianKlinik()
-			input()
-		elif answer == '4':
 			cariAntrian()
 			input()
 		elif answer == '0':
@@ -137,39 +132,22 @@ def DataMedis():
 	print("===============================================")
 	input()
 
-def lihatAntrianKlinik():
-	os.system("CLS")
-	print("==> Bagian Lihat Antrian di Klinik  <==")
-	print("=======================================")
-	print("=====> Masukkan Data diri Anda <=======")
-	NoRekam = input("Nomor Rekam Medis : ")
-	Klinik = input("Klinik : ")
-	hasil = s.lihatAntrian(NoRekam,Klinik)
-	if hasil == False:
-		print("Maaf data antrian anda tidak ditemukan di ",Klinik)
-	else:
-		print(hasil)
-	print()
-	print("===============================================")
-	print("=======> TEKAN ENTER UNTUK MELANJUTKAN <=======")
-	print("===============================================")
-
 def cariAntrian():
-    os.system("CLS")
-    print("========> Bagian Cari Antrian  <=======")
+	os.system("CLS")
+	print("========> Bagian Cari Antrian  <=======")
 	print("=======================================")
 	print("=====> Masukkan Data diri Anda <=======")
     # nama klinik
-    k = input("Nama Klinik : ")
+	k = input("Nama Klinik : ")
     # no rekam medis
-    nk = input("No Rekam Medis : ")
-    tunggu,hasil = s.lihatAntrian(nk,k)
+	nk = input("No Rekam Medis : ")
+	tunggu,hasil = s.lihatAntrian(nk,k)
 
-    if hasil == False:
-        print("Maaf data antrian anda tidak ditemukan di seluruh klinik")
-    else:
-        print("Nomor Antrian anda adalah ",hasil)
-        print("Anda harus Menunggu ",tunggu," Antrian Lagi")
+	if hasil == False:
+		print("Maaf data antrian anda tidak ditemukan di seluruh klinik")
+	else:
+		print("Nomor Antrian anda adalah ",hasil)
+		print("Anda harus Menunggu ",tunggu," Antrian Lagi")
 
 #MAIN
 os.system("CLS")

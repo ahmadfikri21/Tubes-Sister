@@ -83,7 +83,7 @@ with SimpleXMLRPCServer(("127.0.0.1",8008), requestHandler=RequestHandler, allow
                 return k,dataMedis[j][5]
             else:
                 k += 1
-        return False
+        return False,False
 
     def refreshUrutan():
         global dataMedis
