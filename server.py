@@ -36,7 +36,8 @@ with SimpleXMLRPCServer(("127.0.0.1",8008), requestHandler=RequestHandler, allow
         else:
             # untuk mengambil waktu selesai dari antrian sebelumnya
             waktuSelesai = datetime.strptime(datetime.now().date().strftime("%d%m%y")+" "+dataMedis[len(dataMedis)-2][4], "%d%m%y %H:%M:%S")
-             
+            
+            #kondisi untuk menghandle waktu selesai kurang dari waktu sekarang
             if(waktuSelesai < datetime.now()):
                 dataMedis[iterasi].append((datetime.now() + timedelta(minutes = 1)).strftime("%H:%M:%S"))
             else:
@@ -85,6 +86,7 @@ with SimpleXMLRPCServer(("127.0.0.1",8008), requestHandler=RequestHandler, allow
                 k += 1
         return False,False
 
+    #untuk menghapus antrian sesuai waktu
     def refreshUrutan():
         global dataMedis
         if len(dataMedis) > 0:
@@ -102,9 +104,6 @@ with SimpleXMLRPCServer(("127.0.0.1",8008), requestHandler=RequestHandler, allow
     # menjalankan server selamanya
     
     server.serve_forever()
-    
-    # while True:
-    #     print(datetime.now().strftime("%H:%M:%S"), end="\r")
-    #     time.sleep(1)
+
         
 

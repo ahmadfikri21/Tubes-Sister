@@ -6,7 +6,9 @@ s = xmlrpc.client.ServerProxy('http://127.0.0.1:8008', allow_none=True)
 def HomePage():
 	while True:
 		os.system("CLS")
+		#untuk mengecek waktu urutan dan jika melebihi akan dihapus
 		s.refreshUrutan()
+		#UI Homepage
 		print("==========> Bagian Homepage <========")
 		print("=====================================")
 		print("======__________________________=====")
@@ -49,15 +51,17 @@ def HomePage():
 			input()
 			os.system("CLS")
 
+#UI jika user ingin keluar dari homepage
 def AreYouSure():
 	print("=======================================================")
 	print("Apakah kamu benar-benar ingin meninggalkan homepage ?")
 	print(" 1. Ya")
 	print(" 2. Tidak")
 	print("=======================================================")
+	#untuk menyimpan jawaban dari inputan user
 	answer = input('=======> Pilihan Anda: ')
 
-	# kondisi pilihan homepage
+	# kondisi pilihan jika user ingin keluar dari Homepage
 	if answer == '1':
 		print()
 		print("======================> Sekian Terima Kasih Dan Sampai Jumpa <======================")
@@ -65,6 +69,7 @@ def AreYouSure():
 	elif answer == '2':
 		HomePage()
 
+#UI untuk Pilih Klinik
 def PilihKlinik():
 	while True:
 		os.system("CLS")
@@ -109,7 +114,8 @@ def PilihKlinik():
 			print("===============================================")
 			input()
 			os.system("CLS")
-	
+
+#UI untuk pendaftaran Data Medis	
 def DataMedis():
 	os.system("CLS")
 	global noRekam, nama, tanggalLahir
@@ -131,6 +137,7 @@ def DataMedis():
 	print("===============================================")
 	input()
 
+#UI untuk mencari antrian user
 def cariAntrian():
 	os.system("CLS")
 	print("========> Bagian Cari Antrian  <=======")
@@ -142,22 +149,17 @@ def cariAntrian():
 	nk = input("No Rekam Medis : ")
 	tunggu,hasil = s.lihatAntrian(nk,k)
 
+	#Jika data user tidak ada di antrian
 	if hasil == False:
 		print("Maaf data antrian anda tidak ditemukan di seluruh klinik")
+	#Jika data user ada di antrian
 	else:
 		print("Nomor Antrian anda adalah ",hasil)
 		print("Anda harus Menunggu ",tunggu," Antrian Lagi")
 
 #MAIN
+#____________________________
+#clear cmd
 os.system("CLS")
+#menampilkan UI Homepage
 HomePage()
-# PilihKlinik()
-# DataMedis()
-# cariAntrian();
-# s.refreshUrutan()
-
-#function yang diambil dari server
-# print()
-# print("Berikut adalah data medis yang ada pada seluruh klinik yang kami miliki:")
-# print(s.seeList())
-# print("=====> Mohon ditunggu <=======")
