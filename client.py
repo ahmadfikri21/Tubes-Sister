@@ -131,7 +131,7 @@ def DataMedis():
 	hasil = s.registrasi(noRekam,nama,tanggalLahir,klinik)
 
 	# menampilkan nomor antrian dan waktu tunggu
-	print("Nomor Antrian :",hasil[0])
+	print("Nomor Antrian :",hasil)
 	print("===============================================")
 	print("=======> TEKAN ENTER UNTUK MELANJUTKAN <=======")
 	print("===============================================")

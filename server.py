@@ -10,7 +10,7 @@ with SimpleXMLRPCServer(("127.0.0.1",8008), requestHandler=RequestHandler, allow
     
     # untuk menyimpan data registrasi
     dataMedis = []   
-    # untuk menyimpan jumlah berapa kali program dijalankan oleh client
+    # untuk menyimpan jumlah berapa kali program dijalankan oleh client(iterasi ini digunakan untuk mengakses index sekarang dari array DataMedis)
     iterasi = 0
     
     # fungsi untuk melakukan registrasi
@@ -30,6 +30,7 @@ with SimpleXMLRPCServer(("127.0.0.1",8008), requestHandler=RequestHandler, allow
         dataMedis[iterasi].append(klinik)
         # menentukan jam masuk praktek
         noAntrian = hitungAntrian(dataMedis,klinik)
+        # kondisi jika antrian adalah antrian pertama
         if(noAntrian-1 == 0):   
             # memasukkan perkiraan waktu selesai dari user.
             dataMedis[iterasi].append((datetime.now() + timedelta(minutes = 1)).strftime("%H:%M:%S"))
@@ -37,10 +38,12 @@ with SimpleXMLRPCServer(("127.0.0.1",8008), requestHandler=RequestHandler, allow
             # untuk mengambil waktu selesai dari antrian sebelumnya
             waktuSelesai = datetime.strptime(datetime.now().date().strftime("%d%m%y")+" "+dataMedis[len(dataMedis)-2][4], "%d%m%y %H:%M:%S")
             
-            #kondisi untuk menghandle waktu selesai kurang dari waktu sekarang
+            #kondisi untuk meng-handle waktu selesai antrian terakhir yang kurang dari waktu sekarang
             if(waktuSelesai < datetime.now()):
+                # jika waktu selesai antrian terakhir kurang dari waktu sekarang, maka akan diisi dengan waktu sekarang ditambahkan 1 menit
                 dataMedis[iterasi].append((datetime.now() + timedelta(minutes = 1)).strftime("%H:%M:%S"))
             else:
+                # jika tidak maka waktu selesai adalah waktu selesai dari antrian sebelumnya ditambah dengan 1 menit
                 dataMedis[iterasi].append((waktuSelesai + timedelta(minutes = 1)).strftime("%H:%M:%S"))
 
         # untuk menghitung nomor antrian sesuai dengan klinik yang dipilih
@@ -51,13 +54,9 @@ with SimpleXMLRPCServer(("127.0.0.1",8008), requestHandler=RequestHandler, allow
 
         # kondisi untuk menghandle jika antrian adalah antrian yang pertama
         if noAntrian == 0:
-            waktuTunggu = 0
             noAntrian += 1
-        else:
-            now = datetime.now().strftime("%H:%M:%S")
-            waktuTunggu = iterasi*60
         
-        arr = [noAntrian,waktuTunggu]
+        arr = noAntrian
 
         return arr
 
