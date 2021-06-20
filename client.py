@@ -126,7 +126,6 @@ def DataMedis():
 
 	# menampilkan nomor antrian dan waktu tunggu
 	print("Nomor Antrian :",hasil[0])
-	print("Waktu Tunggu :",hasil[1]," Menit")
 	print("===============================================")
 	print("=======> TEKAN ENTER UNTUK MELANJUTKAN <=======")
 	print("===============================================")
