@@ -2,7 +2,7 @@ import xmlrpc.client
 import os
 import datetime
 
-s = xmlrpc.client.ServerProxy('http://127.0.0.1:8008', allow_none=True)
+s = xmlrpc.client.ServerProxy('http://26.240.147.120:8008', allow_none=True)
 
 def HomePage():
 	while True:
