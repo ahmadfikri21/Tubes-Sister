@@ -1,15 +1,21 @@
 import xmlrpc.client
 import os
+import datetime
 
 s = xmlrpc.client.ServerProxy('http://127.0.0.1:8008', allow_none=True)
 
 def HomePage():
 	while True:
 		os.system("CLS")
+		e = datetime.datetime.now()
 		#untuk mengecek waktu urutan dan jika melebihi akan dihapus
 		s.refreshUrutan()
 		#UI Homepage
 		print("==========> Bagian Homepage <========")
+		print ("Today's date: ",e.strftime("%a, %d-%b-%Y"))
+		print()
+		print("=====================================")
+		print("=========> Selamat Datang <==========")
 		print("=====================================")
 		print("======__________________________=====")
 		print("=====|           Menu           |====")
@@ -73,10 +79,11 @@ def AreYouSure():
 def PilihKlinik():
 	while True:
 		os.system("CLS")
+		e = datetime.datetime.now()
 		global klinik
 		print("========> Bagian Pilih Klinik <======")
-		print("=====================================")
-		print("=========> Selamat Datang <==========")
+		print ("Today's date: ",e.strftime("%a, %d-%b-%Y"))
+		print()
 		print("======__________________________=====")
 
 		# untuk menampilkan pilihan klinik
@@ -97,12 +104,15 @@ def PilihKlinik():
 		if answer == '1':
 			klinik = "Klinik Sukapura"
 			DataMedis()
+			break
 		elif answer == '2':
 		   	klinik = "Klinik Sukabirus"
 		   	DataMedis()
+		   	break
 		elif answer == '3':
 		   	klinik = "Klinik Telkom"
 		   	DataMedis()
+		   	break
 		elif answer == '0':
 			HomePage()
 			break
@@ -151,11 +161,17 @@ def cariAntrian():
 
 	#Jika data user tidak ada di antrian
 	if hasil == False:
-		print("Maaf data antrian anda tidak ditemukan di seluruh klinik")
+		print()
+		print("==============================================================")
+		print("=> Maaf data antrian anda tidak ditemukan di seluruh klinik <=")
+		print("==============================================================")
 	#Jika data user ada di antrian
 	else:
+		print()
+		print("============================================")
 		print("Nomor Antrian anda adalah ",hasil)
 		print("Anda harus Menunggu ",tunggu," Antrian Lagi")
+		print("============================================")
 
 #MAIN
 #____________________________

@@ -2,6 +2,7 @@ from xmlrpc.server import SimpleXMLRPCServer
 from xmlrpc.server import SimpleXMLRPCRequestHandler
 from datetime import datetime,timedelta
 import time
+import os
 
 class RequestHandler(SimpleXMLRPCRequestHandler):
     rpc_paths = ('/RPC2',)
@@ -101,6 +102,7 @@ with SimpleXMLRPCServer(("127.0.0.1",8008), requestHandler=RequestHandler, allow
     server.register_function(lihatAntrian, 'lihatAntrian')
     server.register_function(refreshUrutan, 'refreshUrutan')
     
+    os.system("CLS")
     print("Serving.....")
     # menjalankan server selamanya
     
